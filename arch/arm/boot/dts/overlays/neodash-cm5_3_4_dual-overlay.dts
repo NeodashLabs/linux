@@ -9,15 +9,15 @@
 / {
 	compatible = "brcm,bcm2835";
 
-	dsi_frag_0: fragment@0 {
+	dsi_frag: fragment@0 {
 		target = <&dsi0>;
 		__overlay__ {
 			#address-cells = <1>;
 			#size-cells = <0>;
 			status = "okay";
 			port {
-				dsi_out0: endpoint {
-					remote-endpoint = <&panel_in0>;
+				dsi_out: endpoint {
+					remote-endpoint = <&panel_in>;
 				};
 			};
 		};
@@ -29,28 +29,26 @@
 		};
 	};
 
-	i2c_frag0: fragment@2 {
+	i2c_frag: fragment@2 {
 		target = <&i2c_csi_dsi0>;
 		__overlay__ {
 			#address-cells = <1>;
 			#size-cells = <0>;
 			status = "okay";
 
-			panel0: panel_disp0@45 {
+			panel: panel_disp0@45 {
 				reg = <0x45>;
-				compatible = "compatible=waveshare,3.4inch-panel";
-
+				compatible = "waveshare,3.4inch-panel";
 				port {
-					panel_in0: endpoint {
-						remote-endpoint = <&dsi_out0>;
+					panel_in: endpoint {
+						remote-endpoint = <&dsi_out>;
 					};
 				};
 			};
-
 		};
 	};
 
-        dsi_frag1: fragment@3 {
+	dsi_frag1: fragment@3 {
                 target = <&dsi1>;
                 __overlay__ {
                         #address-cells = <1>;
@@ -64,8 +62,8 @@
                 };
         };
 
-        i2c_frag1: fragment@4 {
-                target = <&i2c_csi_dsi1>;
+	i2c_frag1: fragment@4 {
+                target = <&i2c_csi_dsi>;
                 __overlay__ {
                         #address-cells = <1>;
                         #size-cells = <0>;
@@ -74,14 +72,13 @@
                         panel1: panel_disp1@45 {
                                 reg = <0x45>;
                                 compatible = "waveshare,3.4inch-panel";
-
+				linux,fbdev-only;
                                 port {
                                         panel_in1: endpoint {
                                                 remote-endpoint = <&dsi_out1>;
                                         };
                                 };
                         };
-
                 };
         };
 

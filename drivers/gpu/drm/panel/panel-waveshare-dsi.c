@@ -455,6 +455,12 @@ static int ws_panel_probe(struct i2c_client *i2c)
 	struct ws_panel *ts;
 	struct device_node *endpoint, *dsi_host_node;
 	struct mipi_dsi_host *host;
+	u32 channel = 0;
+	if(device_property_read_bool(dev, "linux,fbdev-only"))
+		channel = 1;
+
+	dev_info(dev, "%s: Probing DSI (%p) for channel=%d", __func__, dev->of_node, channel);
+
 	struct mipi_dsi_device_info info = {
 		.type = WS_DSI_DRIVER_NAME,
 		.channel = 0,
@@ -517,6 +523,9 @@ static int ws_panel_probe(struct i2c_client *i2c)
 			PTR_ERR(ts->dsi));
 		return PTR_ERR(ts->dsi);
 	}
+
+	bool fb_only = device_property_read_bool(dev, "linux,fbdev-only");
+
 
 	drm_panel_init(&ts->base, dev, &ws_panel_funcs,
 		       DRM_MODE_CONNECTOR_DSI);
